@@ -27,7 +27,7 @@
 
 namespace vendor
 {
-namespace lineage
+namespace mokee
 {
 namespace livedisplay
 {
@@ -105,5 +105,5 @@ Return<bool> SunlightEnhancement::setEnabled(bool enabled)
 } // namespace implementation
 } // namespace V2_0
 } // namespace livedisplay
-} // namespace lineage
+} // namespace mokee
 } // namespace vendor

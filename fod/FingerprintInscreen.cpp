@@ -54,7 +54,7 @@ static void set(const std::string &path, const T &value)
 
 namespace vendor
 {
-namespace lineage
+namespace mokee
 {
 namespace biometrics
 {
@@ -161,7 +161,7 @@ Return<bool> FingerprintInscreen::shouldBoostBrightness()
     return false;
 }
 
-Return<void> FingerprintInscreen::setCallback(const sp<::vendor::lineage::biometrics::fingerprint::inscreen::V1_0::IFingerprintInscreenCallback> &callback)
+Return<void> FingerprintInscreen::setCallback(const sp<::vendor::mokee::biometrics::fingerprint::inscreen::V1_0::IFingerprintInscreenCallback> &callback)
 {
     (void)callback;
     return Void();
@@ -172,5 +172,5 @@ Return<void> FingerprintInscreen::setCallback(const sp<::vendor::lineage::biomet
 } // namespace inscreen
 } // namespace fingerprint
 } // namespace biometrics
-} // namespace lineage
+} // namespace mokee
 } // namespace vendor

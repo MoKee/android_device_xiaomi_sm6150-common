@@ -356,7 +356,7 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>vendor.lineage.trust</name>
+        <name>vendor.mokee.trust</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
