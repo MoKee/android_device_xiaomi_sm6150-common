@@ -24,11 +24,11 @@ $(call inherit-product-if-exists, vendor/gapps/common/common-vendor.mk)
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-lineage
+    $(LOCAL_PATH)/overlay-mokee
 
 PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += \
-    $(LOCAL_PATH)/overlay-lineage/lineage-sdk \
+    $(LOCAL_PATH)/overlay-mokee/mokee-sdk \
 	$(LOCAL_PATH)/overlay/packages/apps/Snap
 
 # Properties
@@ -230,7 +230,7 @@ PRODUCT_COPY_FILES += \
 
 ifeq ($(strip $(TARGET_USES_FOD)),true)
 PRODUCT_PACKAGES += \
-    vendor.lineage.biometrics.fingerprint.inscreen@1.0-service.xiaomi_sm6150
+    vendor.mokee.biometrics.fingerprint.inscreen@1.0-service.xiaomi_sm6150
 endif
 
 # FM
@@ -287,17 +287,17 @@ PRODUCT_COPY_FILES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-service.xiaomi_sm6150
+    android.hardware.light@2.0-service.xiaomi_davinci
 
 # LiveDisplay
 PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@2.0-service-sdm
+    vendor.mokee.livedisplay@2.0-service-sdm
 
 ifeq ($(strip $(TARGET_USES_FOD)),true)
 PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@2.0-service.xiaomi_sm6150
+    vendor.mokee.livedisplay@2.0-service.xiaomi_sm6150
 else ifeq ($(strip $(TARGET_PRODUCT_HARDWARE)),violet)
-    DEVICE_MANIFEST_FILE += $(LOCAL_PATH)/livedisplay/vendor.lineage.livedisplay@2.0-service-sdm.xml
+    DEVICE_MANIFEST_FILE += $(LOCAL_PATH)/livedisplay/vendor.mokee.livedisplay@2.0-service-sdm.xml
 endif
 
 # Media
@@ -438,7 +438,7 @@ PRODUCT_PACKAGES += \
 
 # Trust HAL
 PRODUCT_PACKAGES += \
-    vendor.lineage.trust@1.0-service
+    vendor.mokee.trust@1.0-service
 
 # USB
 PRODUCT_PACKAGES += \
