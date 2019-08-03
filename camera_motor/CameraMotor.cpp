@@ -37,7 +37,7 @@
 #define MIN_LED_BRIGHTNESS     0
 
 namespace vendor {
-namespace lineage {
+namespace mokee {
 namespace camera {
 namespace motor {
 namespace V1_0 {
@@ -125,5 +125,5 @@ Return<void> CameraMotor::onDisconnect(const hidl_string& cameraId) {
 }  // namespace V1_0
 }  // namespace motor
 }  // namespace camera
-}  // namespace lineage
+}  // namespace mokee
 }  // namespace vendor
