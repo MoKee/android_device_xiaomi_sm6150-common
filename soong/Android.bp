@@ -1,5 +1,5 @@
 bootstrap_go_package {
-    name: "soong-fod-hal-binary",
+    name: "soong-xiaomi-sm6150-common-fod-hal-binary",
     pkgPath: "device/xiaomi/sm6150-common",
     deps: [
         "blueprint",
