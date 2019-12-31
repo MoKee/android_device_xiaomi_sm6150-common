@@ -4,10 +4,6 @@
     "target_path": "packages/resources/devicesettings"
   },
   {
-    "repository": "android_vendor_xiaomi_davinci",
-    "target_path": "vendor/xiaomi/davinci"
-  },
-  {
     "repository": "android_vendor_xiaomi_sm6150-common",
     "target_path": "vendor/xiaomi/sm6150-common"
   }
