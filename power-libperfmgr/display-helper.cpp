@@ -29,34 +29,42 @@
 #include "display-helper.h"
 #define DAEMON_SOCKET "pps"
 static int daemon_socket = -1;
-static int connectPPDaemon() {
+static int connectPPDaemon()
+{
     // Setup socket connection, if not already done.
     if (daemon_socket < 0)
         daemon_socket =
-                socket_local_client(DAEMON_SOCKET, ANDROID_SOCKET_NAMESPACE_RESERVED, SOCK_STREAM);
-    if (daemon_socket < 0) {
+            socket_local_client(DAEMON_SOCKET, ANDROID_SOCKET_NAMESPACE_RESERVED, SOCK_STREAM);
+    if (daemon_socket < 0)
+    {
         ALOGE("Connecting to socket failed: %s", strerror(errno));
         return -1;
     }
     return 0;
 }
-static int ppdComm(const char *cmd) {
+static int ppdComm(const char *cmd)
+{
     int ret = -1;
     ret = connectPPDaemon();
     if (ret < 0)
         return ret;
     ret = write(daemon_socket, cmd, strlen(cmd));
-    if (ret < 0) {
+    if (ret < 0)
+    {
         ALOGE("Failed to send data over socket, %s", strerror(errno));
         return ret;
     }
     return 0;
 }
-void set_display_lpm(int enable) {
+void set_display_lpm(int enable)
+{
     ALOGI("set_display_lpm state: %d", enable);
-    if (enable) {
+    if (enable)
+    {
         ppdComm("foss:on");
-    } else {
+    }
+    else
+    {
         ppdComm("foss:off");
     }
 }

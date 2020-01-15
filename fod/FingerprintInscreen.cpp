@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The LineageOS Project
+ * Copyright (C) 2019-2020 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,109 +40,137 @@
 #define FOD_SENSOR_Y 1931
 #define FOD_SENSOR_SIZE 190
 
-namespace {
+namespace
+{
 
 template <typename T>
-static void set(const std::string& path, const T& value) {
+static void set(const std::string &path, const T &value)
+{
     std::ofstream file(path);
     file << value;
 }
 
 } // anonymous namespace
 
-namespace vendor {
-namespace lineage {
-namespace biometrics {
-namespace fingerprint {
-namespace inscreen {
-namespace V1_0 {
-namespace implementation {
+namespace vendor
+{
+namespace lineage
+{
+namespace biometrics
+{
+namespace fingerprint
+{
+namespace inscreen
+{
+namespace V1_0
+{
+namespace implementation
+{
 
-FingerprintInscreen::FingerprintInscreen() {
+FingerprintInscreen::FingerprintInscreen()
+{
     xiaomiFingerprintService = IXiaomiFingerprint::getService();
 }
 
-Return<int32_t> FingerprintInscreen::getPositionX() {
+Return<int32_t> FingerprintInscreen::getPositionX()
+{
     return FOD_SENSOR_X;
 }
 
-Return<int32_t> FingerprintInscreen::getPositionY() {
+Return<int32_t> FingerprintInscreen::getPositionY()
+{
     return FOD_SENSOR_Y;
 }
 
-Return<int32_t> FingerprintInscreen::getSize() {
+Return<int32_t> FingerprintInscreen::getSize()
+{
     return FOD_SENSOR_SIZE;
 }
 
-Return<void> FingerprintInscreen::onStartEnroll() {
+Return<void> FingerprintInscreen::onStartEnroll()
+{
     return Void();
 }
 
-Return<void> FingerprintInscreen::onFinishEnroll() {
+Return<void> FingerprintInscreen::onFinishEnroll()
+{
     return Void();
 }
 
-Return<void> FingerprintInscreen::onPress() {
+Return<void> FingerprintInscreen::onPress()
+{
     set(DISPPARAM_PATH, DISPPARAM_HBM_FOD_ON);
     xiaomiFingerprintService->extCmd(COMMAND_NIT, PARAM_NIT_FOD);
     return Void();
 }
 
-Return<void> FingerprintInscreen::onRelease() {
+Return<void> FingerprintInscreen::onRelease()
+{
     set(DISPPARAM_PATH, DISPPARAM_HBM_FOD_OFF);
     xiaomiFingerprintService->extCmd(COMMAND_NIT, PARAM_NIT_NONE);
     return Void();
 }
 
-Return<void> FingerprintInscreen::onShowFODView() {
+Return<void> FingerprintInscreen::onShowFODView()
+{
     set(FOD_STATUS_PATH, FOD_STATUS_ON);
     return Void();
 }
 
-Return<void> FingerprintInscreen::onHideFODView() {
+Return<void> FingerprintInscreen::onHideFODView()
+{
     set(FOD_STATUS_PATH, FOD_STATUS_OFF);
     return Void();
 }
 
-Return<bool> FingerprintInscreen::handleAcquired(int32_t acquiredInfo, int32_t vendorCode) {
+Return<bool> FingerprintInscreen::handleAcquired(int32_t acquiredInfo, int32_t vendorCode)
+{
     LOG(ERROR) << "acquiredInfo: " << acquiredInfo << ", vendorCode: " << vendorCode << "\n";
     return false;
 }
 
-Return<bool> FingerprintInscreen::handleError(int32_t error, int32_t vendorCode) {
+Return<bool> FingerprintInscreen::handleError(int32_t error, int32_t vendorCode)
+{
     LOG(ERROR) << "error: " << error << ", vendorCode: " << vendorCode << "\n";
     return error == FINGERPRINT_ERROR_VENDOR && vendorCode == 6;
 }
 
-Return<void> FingerprintInscreen::setLongPressEnabled(bool) {
+Return<void> FingerprintInscreen::setLongPressEnabled(bool)
+{
     return Void();
 }
 
-Return<int32_t> FingerprintInscreen::getDimAmount(int32_t brightness) {
+Return<int32_t> FingerprintInscreen::getDimAmount(int32_t brightness)
+{
     float alpha;
 
-    if (brightness > 62) {
+    if (brightness > 62)
+    {
         alpha = 1.0 - pow(brightness / 255.0 * 430.0 / 600.0, 0.45);
-    } else {
+    }
+    else
+    {
         alpha = 1.0 - pow(brightness / 200.0, 0.45);
     }
 
     return 255 * alpha;
 }
 
-Return<bool> FingerprintInscreen::shouldBoostBrightness() {
+Return<bool> FingerprintInscreen::shouldBoostBrightness()
+{
     return false;
 }
 
-Return<void> FingerprintInscreen::setCallback(const sp<::vendor::lineage::biometrics::fingerprint::inscreen::V1_0::IFingerprintInscreenCallback>& callback) {
-    (void) callback;
+Return<void> FingerprintInscreen::setCallback(const sp<::vendor::lineage::biometrics::fingerprint::inscreen::V1_0::IFingerprintInscreenCallback> &callback)
+{
+    (void)callback;
     return Void();
 }
 
-}  // namespace implementation
-}  // namespace V1_0
-}  // namespace inscreen
-}  // namespace fingerprint
-}  // namespace biometrics
-}  // namespace lineage
-}  // namespace vendor
+} // namespace implementation
+} // namespace V1_0
+} // namespace inscreen
+} // namespace fingerprint
+} // namespace biometrics
+} // namespace lineage
+} // namespace vendor

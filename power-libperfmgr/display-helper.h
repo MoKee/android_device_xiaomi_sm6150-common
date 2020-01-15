@@ -18,20 +18,22 @@
 #define __DISPLAY_HELPER_H__
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 #include <cutils/sockets.h>
 
 #define DAEMON_SOCKET "pps"
 
-enum display_lpm_state {
-    DISPLAY_LPM_OFF = 0,
-    DISPLAY_LPM_ON,
-    DISPLAY_LPM_UNKNOWN,
-};
+    enum display_lpm_state
+    {
+        DISPLAY_LPM_OFF = 0,
+        DISPLAY_LPM_ON,
+        DISPLAY_LPM_UNKNOWN,
+    };
 
-void set_display_lpm(int enable);
+    void set_display_lpm(int enable);
 
 #ifdef __cplusplus
 }

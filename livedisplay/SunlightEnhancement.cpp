@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The LineageOS Project
+ * Copyright (C) 2019-2020 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,41 +25,52 @@
 
 #include "SunlightEnhancement.h"
 
-namespace vendor {
-namespace lineage {
-namespace livedisplay {
-namespace V2_0 {
-namespace implementation {
+namespace vendor
+{
+namespace lineage
+{
+namespace livedisplay
+{
+namespace V2_0
+{
+namespace implementation
+{
 
-static constexpr const char* kDispParamPath =
-        "/sys/devices/platform/soc/ae00000.qcom,mdss_mdp/drm/card0/card0-DSI-1/disp_param";
-static constexpr const char* kHbmStatusPath =
-        "/sys/devices/platform/soc/ae00000.qcom,mdss_mdp/drm/card0/card0-DSI-1/hbm_status";
+static constexpr const char *kDispParamPath =
+    "/sys/devices/platform/soc/ae00000.qcom,mdss_mdp/drm/card0/card0-DSI-1/disp_param";
+static constexpr const char *kHbmStatusPath =
+    "/sys/devices/platform/soc/ae00000.qcom,mdss_mdp/drm/card0/card0-DSI-1/hbm_status";
 
-static constexpr const char* kDispParamHbmOff = "0xF0000";
-static constexpr const char* kDispParamHbmOn = "0x10000";
-static constexpr const char* kDispParamHbmFodOff = "0xE0000";
-static constexpr const char* kDispParamHbmFodOn = "0x20000";
+static constexpr const char *kDispParamHbmOff = "0xF0000";
+static constexpr const char *kDispParamHbmOn = "0x10000";
+static constexpr const char *kDispParamHbmFodOff = "0xE0000";
+static constexpr const char *kDispParamHbmFodOn = "0x20000";
 
-bool hasAmoledPanel() {
+bool hasAmoledPanel()
+{
     std::string device = android::base::GetProperty("ro.product.device", "");
     return device == "davinci" || device == "tucana";
 }
 
-bool hasFingerprintOnDisplay() {
+bool hasFingerprintOnDisplay()
+{
     std::string device = android::base::GetProperty("ro.product.device", "");
     return device == "davinci" || device == "tucana";
 }
 
-bool SunlightEnhancement::isSupported() {
-    if (hasAmoledPanel()) {
+bool SunlightEnhancement::isSupported()
+{
+    if (hasAmoledPanel())
+    {
         std::ofstream disp_param_file(kDispParamPath);
         std::ifstream hbm_status_file(kHbmStatusPath);
-        if (!disp_param_file.is_open()) {
+        if (!disp_param_file.is_open())
+        {
             LOG(ERROR) << "Failed to open " << kDispParamPath << ", error=" << errno
                        << " (" << strerror(errno) << ")";
         }
-        if (!hbm_status_file.is_open()) {
+        if (!hbm_status_file.is_open())
+        {
             LOG(ERROR) << "Failed to open " << kHbmStatusPath << ", error=" << errno
                        << " (" << strerror(errno) << ")";
         }
@@ -68,26 +79,31 @@ bool SunlightEnhancement::isSupported() {
     return false;
 }
 
-Return<bool> SunlightEnhancement::isEnabled() {
+Return<bool> SunlightEnhancement::isEnabled()
+{
     std::ifstream hbm_status_file(kHbmStatusPath);
     int result = -1;
     hbm_status_file >> result;
     return !hbm_status_file.fail() && result > 0;
 }
 
-Return<bool> SunlightEnhancement::setEnabled(bool enabled) {
+Return<bool> SunlightEnhancement::setEnabled(bool enabled)
+{
     std::ofstream disp_param_file(kDispParamPath);
-    if (hasFingerprintOnDisplay()) {
+    if (hasFingerprintOnDisplay())
+    {
         disp_param_file << (enabled ? kDispParamHbmFodOn : kDispParamHbmFodOff);
-    } else {
+    }
+    else
+    {
         disp_param_file << (enabled ? kDispParamHbmOn : kDispParamHbmOff);
     }
     LOG(DEBUG) << "setEnabled fail " << disp_param_file.fail();
     return !disp_param_file.fail();
 }
 
-}  // namespace implementation
-}  // namespace V2_0
-}  // namespace livedisplay
-}  // namespace lineage
-}  // namespace vendor
+} // namespace implementation
+} // namespace V2_0
+} // namespace livedisplay
+} // namespace lineage
+} // namespace vendor

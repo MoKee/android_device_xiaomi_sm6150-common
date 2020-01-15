@@ -64,11 +64,11 @@ const char *master_stats_labels[MASTER_STATS_COUNT] = {
 };
 
 struct stats_section master_sections[MASTER_COUNT] = {
-    { MASTER_APSS,       "APSS", master_stats_labels, ARRAY_SIZE(master_stats_labels) },
-    { MASTER_MPSS,       "MPSS", master_stats_labels, ARRAY_SIZE(master_stats_labels) },
-    { MASTER_ADSP,       "ADSP", master_stats_labels, ARRAY_SIZE(master_stats_labels) },
-    { MASTER_SLPI,       "SLPI", master_stats_labels, ARRAY_SIZE(master_stats_labels) },
-    { MASTER_CDSP,       "CDSP", master_stats_labels, ARRAY_SIZE(master_stats_labels) },
+    {MASTER_APSS, "APSS", master_stats_labels, ARRAY_SIZE(master_stats_labels)},
+    {MASTER_MPSS, "MPSS", master_stats_labels, ARRAY_SIZE(master_stats_labels)},
+    {MASTER_ADSP, "ADSP", master_stats_labels, ARRAY_SIZE(master_stats_labels)},
+    {MASTER_SLPI, "SLPI", master_stats_labels, ARRAY_SIZE(master_stats_labels)},
+    {MASTER_CDSP, "CDSP", master_stats_labels, ARRAY_SIZE(master_stats_labels)},
     // The following masters are currently unused
     //{ MASTER_GPU,         "GPU", master_stats_labels, ARRAY_SIZE(master_stats_labels) },
     //{ MASTER_DISPLAY, "DISPLAY", master_stats_labels, ARRAY_SIZE(master_stats_labels) },
@@ -78,25 +78,24 @@ const char *wlan_stats_labels[WLAN_STATS_COUNT] = {
     "cumulative_sleep_time_ms",
     "cumulative_total_on_time_ms",
     "deep_sleep_enter_counter",
-    "last_deep_sleep_enter_tstamp_ms"
-};
+    "last_deep_sleep_enter_tstamp_ms"};
 
 struct stats_section wlan_sections[] = {
-    { SUBSYSTEM_WLAN, "POWER DEBUG STATS", wlan_stats_labels, ARRAY_SIZE(wlan_stats_labels) },
+    {SUBSYSTEM_WLAN, "POWER DEBUG STATS", wlan_stats_labels, ARRAY_SIZE(wlan_stats_labels)},
 };
 
 const char *system_stats_labels[SYSTEM_STATE_STATS_COUNT] = {
     "count",
-    "actual last sleep(msec)"
-};
+    "actual last sleep(msec)"};
 
 struct stats_section system_sections[] = {
-    { SYSTEM_STATES, "RPM Mode:aosd", system_stats_labels, ARRAY_SIZE(system_stats_labels) },
-    { SYSTEM_STATES, "RPM Mode:cxsd", system_stats_labels, ARRAY_SIZE(system_stats_labels) },
+    {SYSTEM_STATES, "RPM Mode:aosd", system_stats_labels, ARRAY_SIZE(system_stats_labels)},
+    {SYSTEM_STATES, "RPM Mode:cxsd", system_stats_labels, ARRAY_SIZE(system_stats_labels)},
 };
 
 static int parse_stats(const char **stat_labels, size_t num_stats,
-        uint64_t *list, FILE *fp) {
+                       uint64_t *list, FILE *fp)
+{
     ssize_t nread;
     size_t len = LINE_SIZE;
     char *line;
@@ -104,21 +103,25 @@ static int parse_stats(const char **stat_labels, size_t num_stats,
     size_t i;
 
     line = malloc(len);
-    if (!line) {
+    if (!line)
+    {
         ALOGE("%s: no memory to hold line", __func__);
         return -ENOMEM;
     }
 
     while ((stats_read < num_stats) &&
-        (nread = getline(&line, &len, fp) > 0)) {
+           (nread = getline(&line, &len, fp) > 0))
+    {
         char *key = line + strspn(line, " \t");
         char *value = strchr(key, ':');
         if (!value || (value > (line + len)))
             continue;
         *value++ = '\0';
 
-        for (i = 0; i < num_stats; i++) {
-            if (!strncmp(key, stat_labels[i], strlen(stat_labels[i]))) {
+        for (i = 0; i < num_stats; i++)
+        {
+            if (!strncmp(key, stat_labels[i], strlen(stat_labels[i])))
+            {
                 list[i] = strtoull(value, NULL, 0);
                 stats_read++;
                 break;
@@ -131,9 +134,9 @@ static int parse_stats(const char **stat_labels, size_t num_stats,
     return stats_read;
 }
 
-
 static int extract_stats(uint64_t *stats_list, size_t entries_per_section, char *file,
-        struct stats_section *sections, size_t num_sections) {
+                         struct stats_section *sections, size_t num_sections)
+{
     FILE *fp;
     ssize_t read;
     size_t len = LINE_SIZE;
@@ -144,47 +147,55 @@ static int extract_stats(uint64_t *stats_list, size_t entries_per_section, char 
     int ret = 0;
 
     fp = fopen(file, "re");
-    if (fp == NULL) {
+    if (fp == NULL)
+    {
         ALOGE("%s: failed to open: %s Error = %s", __func__, file, strerror(errno));
         return -errno;
     }
 
     line = malloc(len);
-    if (!line) {
+    if (!line)
+    {
         ALOGE("%s: no memory to hold line", __func__);
         fclose(fp);
         return -ENOMEM;
     }
 
     // Ensure that any missing stats default to 0
-    for (i = 0; i < (entries_per_section * num_sections); i++) {
+    for (i = 0; i < (entries_per_section * num_sections); i++)
+    {
         stats_list[i] = 0L;
     }
 
     // Iterate over the sections we expect to find in the file, calling parse_stats()
     // to process each section as we detect section headers
-    while ((sections_read < num_sections) && (read = getline(&line, &len, fp) != -1)) {
+    while ((sections_read < num_sections) && (read = getline(&line, &len, fp) != -1))
+    {
         size_t begin = strspn(line, " \t");
 
-        for (i = 0; i < num_sections; i++) {
-            if (!strncmp(line + begin, sections[i].label, strlen(sections[i].label))) {
+        for (i = 0; i < num_sections; i++)
+        {
+            if (!strncmp(line + begin, sections[i].label, strlen(sections[i].label)))
+            {
                 sections_read++;
                 break;
             }
         }
 
-        if (i == num_sections) {
+        if (i == num_sections)
+        {
             continue;
         }
 
         stats_read = parse_stats(sections[i].stats_labels, sections[i].num_stats,
-                &stats_list[i * entries_per_section], fp);
+                                 &stats_list[i * entries_per_section], fp);
         // If we don't find all of the stats we expect in this section, our understanding of
         // the input is wrong, and we can't just carry on as if everything is okay.  Better
         // to log the error and give up than potentially return incorrect data as stats.
-        if (stats_read != sections[i].num_stats) {
+        if (stats_read != sections[i].num_stats)
+        {
             ALOGE("%s: failed to read all stats for %s section (%zu of %zu)", __func__,
-                    sections[i].label, stats_read, sections[i].num_stats);
+                  sections[i].label, stats_read, sections[i].num_stats);
             break;
         }
     }
@@ -195,33 +206,38 @@ static int extract_stats(uint64_t *stats_list, size_t entries_per_section, char 
     return ret;
 }
 
-int extract_master_stats(uint64_t *list, size_t list_length) {
+int extract_master_stats(uint64_t *list, size_t list_length)
+{
     size_t entries_per_section = list_length / ARRAY_SIZE(master_sections);
-    if (list_length % entries_per_section != 0) {
+    if (list_length % entries_per_section != 0)
+    {
         ALOGW("%s: stats list size not an even multiple of section count", __func__);
     }
 
     return extract_stats(list, entries_per_section, MASTER_STATS_FILE,
-            master_sections, ARRAY_SIZE(master_sections));
+                         master_sections, ARRAY_SIZE(master_sections));
 }
 
-int extract_wlan_stats(uint64_t *list, size_t list_length) {
+int extract_wlan_stats(uint64_t *list, size_t list_length)
+{
     size_t entries_per_section = list_length / ARRAY_SIZE(wlan_sections);
-    if (list_length % entries_per_section != 0) {
+    if (list_length % entries_per_section != 0)
+    {
         ALOGW("%s: stats list size not an even multiple of section count", __func__);
     }
 
     return extract_stats(list, entries_per_section, WLAN_STATS_FILE,
-            wlan_sections, ARRAY_SIZE(wlan_sections));
+                         wlan_sections, ARRAY_SIZE(wlan_sections));
 }
 
-int extract_system_stats(uint64_t *list, size_t list_length) {
+int extract_system_stats(uint64_t *list, size_t list_length)
+{
     size_t entries_per_section = list_length / ARRAY_SIZE(system_sections);
-    if (list_length % entries_per_section != 0) {
+    if (list_length % entries_per_section != 0)
+    {
         ALOGW("%s: stats list size not an even multiple of section count", __func__);
     }
 
     return extract_stats(list, entries_per_section, SYSTEM_STATS_FILE,
-            system_sections, ARRAY_SIZE(system_sections));
+                         system_sections, ARRAY_SIZE(system_sections));
 }
-

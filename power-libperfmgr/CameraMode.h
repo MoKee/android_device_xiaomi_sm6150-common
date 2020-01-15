@@ -17,7 +17,8 @@
 #ifndef POWER_LIBPERFMGR_CAMERAMODE_H_
 #define POWER_LIBPERFMGR_CAMERAMODE_H_
 
-enum CameraStreamingMode {
+enum CameraStreamingMode
+{
     CAMERA_STREAMING_OFF = 0,
     CAMERA_STREAMING,
     CAMERA_STREAMING_1080P,
@@ -27,4 +28,4 @@ enum CameraStreamingMode {
     CAMERA_STREAMING_MAX
 };
 
-#endif  // POWER_LIBPERFMGR_CAMERAMODE_H_
+#endif // POWER_LIBPERFMGR_CAMERAMODE_H_

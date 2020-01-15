@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 The LineageOS Project
+ * Copyright (C) 2019-2020 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,13 +30,15 @@ using vendor::lineage::biometrics::fingerprint::inscreen::V1_0::implementation::
 using android::OK;
 using android::status_t;
 
-int main() {
+int main()
+{
     android::sp<IFingerprintInscreen> service = new FingerprintInscreen();
 
     configureRpcThreadpool(1, true);
 
     status_t status = service->registerAsService();
-    if (status != OK) {
+    if (status != OK)
+    {
         LOG(ERROR) << "Cannot register FOD HAL service.";
         return 1;
     }

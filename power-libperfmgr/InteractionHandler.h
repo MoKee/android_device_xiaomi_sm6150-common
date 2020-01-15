@@ -25,21 +25,23 @@
 
 using ::android::perfmgr::HintManager;
 
-enum interaction_state {
+enum interaction_state
+{
     INTERACTION_STATE_UNINITIALIZED,
     INTERACTION_STATE_IDLE,
     INTERACTION_STATE_INTERACTION,
     INTERACTION_STATE_WAITING,
 };
 
-struct InteractionHandler {
-    InteractionHandler(std::shared_ptr<HintManager> const & hint_manager);
+struct InteractionHandler
+{
+    InteractionHandler(std::shared_ptr<HintManager> const &hint_manager);
     ~InteractionHandler();
     bool Init();
     void Exit();
     void Acquire(int32_t duration);
 
- private:
+private:
     void Release();
     void WaitForIdle(int32_t wait_ms, int32_t timeout_ms);
     void AbortWaitLocked();
