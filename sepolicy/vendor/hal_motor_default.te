@@ -9,8 +9,9 @@ binder_call(hal_motor_client, hal_motor_server)
 add_hwservice(hal_motor_server, hal_motor_hwservice)	
 allow hal_motor_client hal_motor_hwservice:hwservice_manager find;
 
-# Allow hal_motor_default to read and write to motor_device
+# Allow hal_motor_default to read and write to { motor_device hall_device }
 allow hal_motor_default motor_device:chr_file rw_file_perms;
+allow hal_motor_default hall_device:chr_file { open read write };
 
 # Allow hal_motor_default to read and write to persist_sensors_file
 allow hal_motor_default persist_sensors_file:dir rw_dir_perms;
