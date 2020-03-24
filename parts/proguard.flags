@@ -1,7 +1,3 @@
--keep class org.mokee.settings.dirac.* {
-  *;
-}
-
 -keep class org.mokee.settings.doze.* {
   *;
 }

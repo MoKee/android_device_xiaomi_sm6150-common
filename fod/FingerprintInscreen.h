@@ -14,34 +14,28 @@
  * limitations under the License.
  */
 
-#ifndef VENDOR_MOKEE_BIOMETRICS_FINGERPRINT_INSCREEN_V1_0_FINGERPRINTINSCREEN_H
-#define VENDOR_MOKEE_BIOMETRICS_FINGERPRINT_INSCREEN_V1_0_FINGERPRINTINSCREEN_H
+#ifndef VENDOR_LINEAGE_BIOMETRICS_FINGERPRINT_INSCREEN_V1_1_FINGERPRINTINSCREEN_H
+#define VENDOR_LINEAGE_BIOMETRICS_FINGERPRINT_INSCREEN_V1_1_FINGERPRINTINSCREEN_H
 
-#include <vendor/mokee/biometrics/fingerprint/inscreen/1.0/IFingerprintInscreen.h>
+#include <vendor/mokee/biometrics/fingerprint/inscreen/1.1/IFingerprintInscreen.h>
 #include <vendor/xiaomi/hardware/fingerprintextension/1.0/IXiaomiFingerprint.h>
+#include <vendor/xiaomi/hardware/touchfeature/1.0/ITouchFeature.h>
 
-namespace vendor
-{
-namespace mokee
-{
-namespace biometrics
-{
-namespace fingerprint
-{
-namespace inscreen
-{
-namespace V1_0
-{
-namespace implementation
-{
+namespace vendor {
+namespace mokee {
+namespace biometrics {
+namespace fingerprint {
+namespace inscreen {
+namespace V1_1 {
+namespace implementation {
 
 using ::android::sp;
 using ::android::hardware::Return;
 using ::android::hardware::Void;
 using ::vendor::xiaomi::hardware::fingerprintextension::V1_0::IXiaomiFingerprint;
+using ::vendor::xiaomi::hardware::touchfeature::V1_0::ITouchFeature;
 
-class FingerprintInscreen : public IFingerprintInscreen
-{
+class FingerprintInscreen : public IFingerprintInscreen {
 public:
     FingerprintInscreen();
     Return<int32_t> getPositionX() override;
@@ -58,18 +52,21 @@ public:
     Return<void> setLongPressEnabled(bool enabled) override;
     Return<int32_t> getDimAmount(int32_t brightness) override;
     Return<bool> shouldBoostBrightness() override;
-    Return<void> setCallback(const sp<::vendor::mokee::biometrics::fingerprint::inscreen::V1_0::IFingerprintInscreenCallback> &callback) override;
+    Return<void> setCallback(const sp<V1_0::IFingerprintInscreenCallback>& callback) override;
+    Return<void> switchHbm(bool enabled) override;
 
 private:
+    bool mFodCircleVisible;
+    sp<ITouchFeature> TouchFeatureService;
     sp<IXiaomiFingerprint> xiaomiFingerprintService;
 };
 
-} // namespace implementation
-} // namespace V1_0
-} // namespace inscreen
-} // namespace fingerprint
-} // namespace biometrics
-} // namespace mokee
-} // namespace vendor
+}  // namespace implementation
+}  // namespace V1_1
+}  // namespace inscreen
+}  // namespace fingerprint
+}  // namespace biometrics
+}  // namespace mokee
+}  // namespace vendor
 
-#endif // VENDOR_LINEAGE_BIOMETRICS_FINGERPRINT_INSCREEN_V1_0_FINGERPRINTINSCREEN_H
+#endif  // VENDOR_LINEAGE_BIOMETRICS_FINGERPRINT_INSCREEN_V1_1_FINGERPRINTINSCREEN_H

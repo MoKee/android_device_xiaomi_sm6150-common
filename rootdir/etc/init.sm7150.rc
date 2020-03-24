@@ -41,5 +41,3 @@ on fs
 on post-fs-data
     mkdir /data/vendor/nfc 0770 nfc nfc
 
-service audioshell_service /vendor/bin/audioshell_service
-    oneshot

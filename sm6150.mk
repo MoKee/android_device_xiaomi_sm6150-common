@@ -1,13 +1,12 @@
 #
-# Copyright (C) 2018-2019 The LineageOS Project
+# Copyright (C) 2018-2020 The LineageOS Project
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 
-# Inherit from those products. Most specific first.	
-$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)	
-$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)	
-$(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_p.mk)	
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Enable updating of APEXes
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
@@ -18,11 +17,6 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 # Get non-open-source specific aspects
 $(call inherit-product-if-exists, vendor/xiaomi/sm6150-common/sm6150-common-vendor.mk)
 
-ifdef WITH_GAPPS
-# Gapps
-$(call inherit-product-if-exists, vendor/gapps/common/common-vendor.mk)
-endif
-
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
@@ -31,10 +25,9 @@ DEVICE_PACKAGE_OVERLAYS += \
 PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += \
     $(LOCAL_PATH)/overlay-mokee/mokee-sdk \
-	$(LOCAL_PATH)/overlay/packages/apps/Snap
+    $(LOCAL_PATH)/overlay/packages/apps/Snap
 
 # Properties
--include $(LOCAL_PATH)/common-props.mk
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
 
 # Device uses high-density artwork where available
@@ -62,10 +55,8 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml \
     frameworks/native/data/etc/android.hardware.sensor.compass.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.compass.xml \
     frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml \
-    frameworks/native/data/etc/android.hardware.sensor.hifi_sensors.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.hifi_sensors.xml \
     frameworks/native/data/etc/android.hardware.sensor.light.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.light.xml \
     frameworks/native/data/etc/android.hardware.sensor.proximity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/native/data/etc/android.hardware.sensor.relative_humidity.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.relative_humidity.xml \
     frameworks/native/data/etc/android.hardware.sensor.stepcounter.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepcounter.xml \
     frameworks/native/data/etc/android.hardware.sensor.stepdetector.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.stepdetector.xml \
     frameworks/native/data/etc/android.hardware.telephony.cdma.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.cdma.xml \
@@ -95,11 +86,12 @@ PRODUCT_PACKAGES += \
 
 # Audio
 PRODUCT_PACKAGES += \
+    android.hardware.audio.effect@5.0-impl \
     android.hardware.audio@2.0-service \
     android.hardware.audio@5.0-impl \
-    android.hardware.audio.effect@5.0-impl \
-    android.hardware.soundtrigger@2.2-impl:32 \
+    android.hardware.soundtrigger@2.2-impl \
     audio.a2dp.default \
+    audio.primary.sm6150 \
     audio.r_submix.default \
     audio.usb.default \
     liba2dpoffload \
@@ -109,7 +101,6 @@ PRODUCT_PACKAGES += \
     libcomprcapture \
     libexthwplugin \
     libhdmiedid \
-    libhdmipassthru \
     libhfp \
     libqcompostprocbundle \
     libqcomvisualizer \
@@ -122,14 +113,15 @@ PRODUCT_PACKAGES += \
     tinymix
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/audio_policy_configuration.xml
+    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/audio/,$(TARGET_COPY_OUT_VENDOR)/etc)
 
 PRODUCT_COPY_FILES += \
+    frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/a2dp_in_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/a2dp_in_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
     frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
+    frameworks/av/services/audiopolicy/config/hearing_aid_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/hearing_aid_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
     frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration.xml
 
@@ -143,14 +135,11 @@ PRODUCT_COPY_FILES += \
 
 # Bluetooth
 PRODUCT_PACKAGES += \
-    audio.bluetooth.default \
     android.hardware.bluetooth.audio@2.0-impl \
+    audio.bluetooth.default \
     libbthost_if \
     vendor.qti.hardware.bluetooth_audio@2.0.vendor \
     vendor.qti.hardware.btconfigstore@1.0.vendor
-
-# Boot SPL
-BOOT_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -196,30 +185,12 @@ PRODUCT_PACKAGES += \
 
 # Display interfaces
 PRODUCT_PACKAGES += \
-    vendor.display.config@1.0.vendor \
-    vendor.display.config@1.1.vendor \
-    vendor.display.config@1.2.vendor \
-    vendor.display.config@1.3.vendor \
-    vendor.display.config@1.4.vendor \
-    vendor.display.config@1.5.vendor \
-    vendor.display.config@1.6.vendor \
-    vendor.display.config@1.7.vendor \
-    vendor.display.config@1.8.vendor \
-    vendor.display.config@1.9.vendor \
-    vendor.display.config@1.10.vendor \
-    vendor.display.config@1.11.vendor \
     vendor.qti.hardware.display.allocator@1.0.vendor \
-    vendor.qti.hardware.display.allocator@3.0.vendor \
     vendor.qti.hardware.display.composer@1.0.vendor \
     vendor.qti.hardware.display.composer@2.0.vendor \
-    vendor.qti.hardware.display.mapper@2.0.vendor \
-    vendor.qti.hardware.display.mapper@3.0.vendor \
     vendor.qti.hardware.display.mapper@1.0.vendor \
     vendor.qti.hardware.display.mapper@1.1.vendor \
-    vendor.qti.hardware.display.mapper@2.0.vendor \
-    vendor.qti.hardware.display.mapper@3.0.vendor \
-    vendor.qti.hardware.display.mapperextensions@1.0.vendor \
-    vendor.qti.hardware.display.mapperextensions@1.1.vendor
+    vendor.qti.hardware.display.mapper@2.0.vendor
 
 # DRM
 PRODUCT_PACKAGES += \
@@ -233,7 +204,7 @@ PRODUCT_COPY_FILES += \
 
 ifeq ($(strip $(TARGET_USES_FOD)),true)
 PRODUCT_PACKAGES += \
-    vendor.mokee.biometrics.fingerprint.inscreen@1.0-service.xiaomi_sm6150
+    vendor.mokee.biometrics.fingerprint.inscreen@1.1-service.xiaomi_sm6150
 endif
 
 # FM
@@ -245,19 +216,26 @@ PRODUCT_PACKAGES += \
 # Framework detect
 PRODUCT_PACKAGES += \
     libqti_vndfwk_detect \
-    libqti_vndfwk_detect.vendor \
-    libvndfwk_detect_jni.qti \
-    libvndfwk_detect_jni.qti.vendor
+    libvndfwk_detect_jni.qti
 
 # GPS
+PRODUCT_PACKAGES += \
+    android.hardware.gnss@2.0-impl-qti \
+    android.hardware.gnss@2.0-service-qti \
+    libbatching \
+    libgeofencing \
+    libgnss
+
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/gps/,$(TARGET_COPY_OUT_VENDOR)/etc)
+    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/gps/etc/,$(TARGET_COPY_OUT_VENDOR)/etc)
+
+# HIDL
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/manifest-qva.xml:$(TARGET_COPY_OUT_ODM)/etc/vintf/manifest.xml
 
 # Health
 PRODUCT_PACKAGES += \
-    android.hardware.health@2.0-impl \
     android.hardware.health@2.0-service
-
 
 # IFAA manager
 PRODUCT_PACKAGES += \
@@ -290,7 +268,7 @@ PRODUCT_COPY_FILES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-service.xiaomi_davinci
+    android.hardware.light@2.0-service.xiaomi_sm6150
 
 # LiveDisplay
 PRODUCT_PACKAGES += \
@@ -326,8 +304,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_telephony.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video.xml \
-    frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video_le.xml
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video.xml
 
 # Native Public Libraries
 PRODUCT_COPY_FILES += \
@@ -345,10 +322,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/perf/perf-profile0.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile0.conf
 
-# Preopt SystemUI
-PRODUCT_DEXPREOPT_SPEED_APPS += \
-    SystemUI
-
 # QTI
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/privapp-permissions-qti.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-qti.xml \
@@ -356,15 +329,15 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
+    fstab.qcom \
     init.insmod.sh \
     init.msm.usb.configfs.rc \
     init.power.rc \
     init.qcom.rc \
     init.qcom.usb.rc \
     init.qcom.usb.sh \
-    ueventd.qcom.rc \
-    fstab.persist \
-    fstab.qcom
+    init.recovery.qcom.rc \
+    ueventd.qcom.rc
 
 # RCS
 PRODUCT_PACKAGES += \
@@ -396,13 +369,13 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
+    android.hardware.radio.config@1.0 \
     android.hardware.radio@1.4 \
-    android.hardware.radio.config@1.2 \
     android.hardware.secure_element@1.0 \
     libjson \
+    libprotobuf-cpp-full \
     librmnetctl \
-    libxml2 \
-    libprotobuf-cpp-full
+    libxml2
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \
@@ -416,14 +389,15 @@ PRODUCT_PACKAGES += \
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH)
+    $(LOCAL_PATH) \
+    device/xiaomi/common
 
 # Telephony
 PRODUCT_PACKAGES += \
-    qti-telephony-hidl-wrapper \
     qti_telephony_hidl_wrapper.xml \
-    qti-telephony-utils \
     qti_telephony_utils.xml \
+    qti-telephony-hidl-wrapper \
+    qti-telephony-utils \
     telephony-ext
 
 PRODUCT_BOOT_JARS += \
@@ -449,10 +423,7 @@ PRODUCT_PACKAGES += \
 
 # USB
 PRODUCT_PACKAGES += \
-    android.hardware.usb@1.0-service.basic
-
-# Vendor SPL
-VENDOR_SECURITY_PATCH = $(PLATFORM_SECURITY_PATCH)
+    android.hardware.usb@1.0-service
 
 # Vibrator
 PRODUCT_PACKAGES += \
@@ -471,17 +442,17 @@ PRODUCT_PACKAGES += \
     wpa_supplicant.conf
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/wifi/hostapd.accept:$(TARGET_COPY_OUT_VENDOR)/etc/hostapd/hostapd.accept \
-    $(LOCAL_PATH)/wifi/hostapd.conf:$(TARGET_COPY_OUT_VENDOR)/etc/hostapd/hostapd_default.conf \
-    $(LOCAL_PATH)/wifi/hostapd.deny:$(TARGET_COPY_OUT_VENDOR)/etc/hostapd/hostapd.deny \
     $(LOCAL_PATH)/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini \
     $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
 # WiFi Display
 PRODUCT_PACKAGES += \
-    libln \
     libdisplayconfig.vendor \
-    libqdMetaData
+    libnl \
+    libqdMetaData \
+    libqdMetaData.system \
+    libqdMetaData.vendor
 
 PRODUCT_BOOT_JARS += \
     WfdCommon

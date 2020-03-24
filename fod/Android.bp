@@ -1,5 +1,5 @@
 //
-// Copyright (C) 2019 The LineageOS Project
+// Copyright (C) 2019-2020 The LineageOS Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
 // limitations under the License.
 
 cc_binary {
-    name: "vendor.mokee.biometrics.fingerprint.inscreen@1.0-service.xiaomi_sm6150",
+    name: "vendor.mokee.biometrics.fingerprint.inscreen@1.1-service.xiaomi_sm6150",
     relative_install_path: "hw",
-    vintf_fragments: ["vendor.mokee.biometrics.fingerprint.inscreen@1.0-service.xiaomi_sm6150.xml"],
-    init_rc: ["vendor.mokee.biometrics.fingerprint.inscreen@1.0-service.xiaomi_sm6150.rc"],
+    vintf_fragments: ["vendor.mokee.biometrics.fingerprint.inscreen@1.1-service.xiaomi_sm6150.xml"],
+    init_rc: ["vendor.mokee.biometrics.fingerprint.inscreen@1.1-service.xiaomi_sm6150.rc"],
     defaults: ["hidl_defaults"],
     srcs: ["service.cpp", "FingerprintInscreen.cpp"],
     shared_libs: [
@@ -28,9 +28,10 @@ cc_binary {
         "liblog",
         "libhwbinder",
         "libutils",
-        "vendor.goodix.hardware.biometrics.fingerprint@2.1",
-        "vendor.mokee.biometrics.fingerprint.inscreen@1.0",
-        "vendor.xiaomi.hardware.fingerprintextension@1.0",
+        "//device/xiaomi/common:vendor.goodix.hardware.biometrics.fingerprint@2.1",
+        "vendor.mokee.biometrics.fingerprint.inscreen@1.1",
+        "//device/xiaomi/common:vendor.xiaomi.hardware.fingerprintextension@1.0",
+        "//device/xiaomi/common:vendor.xiaomi.hardware.touchfeature@1.0",
     ],
     proprietary: true,
 }

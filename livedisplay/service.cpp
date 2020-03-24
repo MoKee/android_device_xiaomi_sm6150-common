@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 The LineageOS Project
+ * Copyright (C) 2019 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,23 +31,20 @@ using android::hardware::joinRpcThreadpool;
 using ::vendor::mokee::livedisplay::V2_0::ISunlightEnhancement;
 using ::vendor::mokee::livedisplay::V2_0::implementation::SunlightEnhancement;
 
-int main()
-{
+int main() {
     sp<SunlightEnhancement> sunlightEnhancement;
     status_t status;
 
     LOG(INFO) << "LiveDisplay HAL custom service is starting.";
 
     sunlightEnhancement = new SunlightEnhancement();
-    if (sunlightEnhancement == nullptr)
-    {
+    if (sunlightEnhancement == nullptr) {
         LOG(ERROR) << "Can not create an instance of LiveDisplay HAL SunlightEnhancement Iface,"
                    << "exiting.";
         goto shutdown;
     }
 
-    if (!sunlightEnhancement->isSupported())
-    {
+    if (!sunlightEnhancement->isSupported()) {
         LOG(ERROR) << "SunlightEnhancement Iface is not supported, gracefully bailing out.";
         return 1;
     }
@@ -55,8 +52,7 @@ int main()
     configureRpcThreadpool(1, true /*callerWillJoin*/);
 
     status = sunlightEnhancement->registerAsService();
-    if (status != OK)
-    {
+    if (status != OK) {
         LOG(ERROR) << "Could not register service for LiveDisplay HAL SunlightEnhancement Iface ("
                    << status << ")";
         goto shutdown;
