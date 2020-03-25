@@ -4,8 +4,7 @@
     "target_path": "vendor/xiaomi/sm6150-common"
   },
   {
-    "repository": "LineageOS/android_device_xiaomi_common",
-    "target_path": "device/xiaomi/common",
-    "branch": "lineage-17.1"
+    "repository": "android_device_xiaomi_common",
+    "target_path": "device/xiaomi/common"
   },
 ]
